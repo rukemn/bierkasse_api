@@ -1,10 +1,10 @@
 // /lib/routes/crmRoutes.ts
 import {Request, Response} from "express";
-import { ContactController } from "../controllers/crmController";
+import { CustomerController } from "../controllers/CustomerController";
 
 export class Routes {
 
-    public contactController : ContactController = new ContactController();       
+    public customerController : CustomerController = new CustomerController();       
     public routes(app): void {          
         app.route('/')
         .get((req: Request, res: Response) => {            
@@ -37,13 +37,13 @@ export class Routes {
         })           
 
         // Create a new contact
-        app.route('/contact')
-        .post(this.contactController.addNewContact)
-        .get(this.contactController.getContacts);
+        app.route('/customer')
+        .post(this.customerController.addNewCustomer)
+        .get(this.customerController.getCustomers);
 
 
         //Look up by ID
-        app.route('/contact/:contactId')
-        .get(this.contactController.getContactWithID)
+        app.route('/customer/:customerId')
+        .get(this.customerController.getCustomerById);
     }
 }

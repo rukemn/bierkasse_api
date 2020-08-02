@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Routes = void 0;
-const crmController_1 = require("../controllers/crmController");
+const CustomerController_1 = require("../controllers/CustomerController");
 class Routes {
     constructor() {
-        this.contactController = new crmController_1.ContactController();
+        this.customerController = new CustomerController_1.CustomerController();
     }
     routes(app) {
         app.route('/')
@@ -35,12 +35,12 @@ class Routes {
             });
         });
         // Create a new contact
-        app.route('/contact')
-            .post(this.contactController.addNewContact)
-            .get(this.contactController.getContacts);
+        app.route('/customer')
+            .post(this.customerController.addNewCustomer)
+            .get(this.customerController.getCustomers);
         //Look up by ID
-        app.route('/contact/:contactId')
-            .get(this.contactController.getContactWithID);
+        app.route('/customer/:customerId')
+            .get(this.customerController.getCustomerById);
     }
 }
 exports.Routes = Routes;

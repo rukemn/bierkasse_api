@@ -1,0 +1,7 @@
+mongoose
+
+collection <-> table
+document <-> rows
+field <-> column
+schema : document data structure ENFORDED by application layer
+model : Constructor for Schema instanced(documents)

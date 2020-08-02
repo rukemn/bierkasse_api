@@ -30,10 +30,10 @@ class App {
         mongoose.set('useUnifiedTopology', true);
 
         mongoose.connect(this.mongoUrl).then(async () =>{
-            console.log("connected to mongoLOL");
-            console.log(this.mongoUrl);
+            console.log("connected to mongo:", this.mongoUrl);
         }).catch( (error) => {
             console.log("failed connecting to mongo");
+            console.log(error);
         })
     }
 
