@@ -34,16 +34,16 @@ export class Routes {
         	res.status(200).send({
         		message : "recieved item UPDATE/CREATE request"
         	})
-        })           
+        })
 
         // Create a new contact
         app.route('/customer')
         .post(this.customerController.addNewCustomer)
         .get(this.customerController.getCustomers);
 
-
         //Look up by ID
         app.route('/customer/:customerId')
-        .get(this.customerController.getCustomerById);
+        .get(this.customerController.getCustomerById)
+        .delete(this.customerController.deleteCustomerById);
     }
 }

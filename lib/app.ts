@@ -3,6 +3,7 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import { Routes } from "./routes/crmRoutes";
 import * as mongoose from "mongoose";
+import errorMiddleware from "../lib/middleware/errorHandling"
 dotenv.config();
 
 class App {
@@ -21,8 +22,10 @@ class App {
 
     private config(): void{
         // support application/json type post data
-        this.app.use(bodyParser.json());        //support application/x-www-form-urlencoded post data
+        this.app.use(bodyParser.json()); 
+        //support application/x-www-form-urlencoded post data
         this.app.use(bodyParser.urlencoded({ extended: false }));
+        this.app.use(errorMiddleware);
     }
 
     private mongoSetup(): void{
