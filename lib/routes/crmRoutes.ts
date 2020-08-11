@@ -38,7 +38,7 @@ export class Routes {
 
         // Create a new contact
         app.route('/customer')
-        .post(this.customerController.addNewCustomer)
+        .post(this.customerController.createNewCustomer)
         .get(this.customerController.getCustomers);
 
         //Look up by ID

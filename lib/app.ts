@@ -3,7 +3,7 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import { Routes } from "./routes/crmRoutes";
 import * as mongoose from "mongoose";
-import errorMiddleware from "../lib/middleware/errorHandling"
+import errorMiddleware from "./middleware/errorHandling"
 dotenv.config();
 
 class App {
@@ -13,19 +13,20 @@ class App {
     public mongoUrl: string = process.env.DATABASE_URL;
 
     constructor() {
-
         this.app = express();
-        this.config();
-        this.routePrv.routes(this.app); 
+
         this.mongoSetup();
+        this.initMiddleware();
+        this.routePrv.routes(this.app); 
+        this.app.use(errorMiddleware);
     }
 
-    private config(): void{
+    private initMiddleware(): void{
         // support application/json type post data
         this.app.use(bodyParser.json()); 
         //support application/x-www-form-urlencoded post data
         this.app.use(bodyParser.urlencoded({ extended: false }));
-        this.app.use(errorMiddleware);
+        
     }
 
     private mongoSetup(): void{
@@ -39,7 +40,6 @@ class App {
             console.log(error);
         })
     }
-
 }
 
 export default new App().app;

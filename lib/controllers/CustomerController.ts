@@ -2,6 +2,7 @@ import { Customer, CustomerModel } from "../models/customerModel";
 import {Request, Response, NextFunction} from "express";
 import * as mongoose from "mongoose";
 import HttpException from "../exceptions/HttpException";
+import CustomerNotFoundException from "../exceptions/CustomerNotFoundException";
 
 
 export class CustomerController{
@@ -9,63 +10,63 @@ export class CustomerController{
     private model: CustomerModel;
     constructor(){
         this.model = new Customer().model;
-        console.log(this.model);
+        //console.log(this.model);
     }
-    public addNewCustomer = (req: Request, res: Response) => {
-        let newCustomer = new this.model(req.body);
+
+    public createNewCustomer = (request: Request, response: Response, next : NextFunction) => {
+        let newCustomer = new this.model(request.body);
         newCustomer.save()
         .then(
             savedContact => {
                 console.log("saved new Customer" , savedContact);
+                response.status(200).send("Customer " + savedContact.name + " saved")
             }
-        ).catch( err => console.log("some fail", err));
+        ).catch( err => {
+            console.log("some fail", err);
+        });
     }
 
-
-    public getCustomers = async (req: Request, res: Response) => {
+    public getCustomers = async (request: Request, response: Response, next: NextFunction) => {
         console.log("getCustomers called");
         this.model.find({})
-        .then( result => {
-            console.log (result);
-            res.status(200).send(result);
+        .then( customers => {
+            console.log (customers);
+            if(customers.length > 0){
+                response.status(200).send(customers);
+            }else{
+                response.status(200).send("There are no Customers")
+            }
         }).catch(error => {
             console.log("error" + error);
-            res.status(500).send({"error" : "internal"})            
+            next(new HttpException(500, "internal Error"));        
         })
     }
 
-    public getCustomerById = async (req: Request, res: Response) => {
-        console.log("getCustomerById called");
-        console.log(req.params)
-        console.log(req.params["customerId"]);
-        this.model.findOne({customerId : req.params["customerId"]})
-        .then( result => {
-            console.log("done finding");
+    public getCustomerById = async (request: Request, response: Response, next: NextFunction) => {
+        const customerID = request.params["customerId"];
+        this.model.findOne({customerId :customerID })
+        .then(result => {
             console.log(result);
-            res.status(200).send(result);
+            response.status(200).send(result);
         }).catch( error => {
-            console.log("error, couldn't be found" + error);
-            res.status(404).send({"Error" : "Couldn't find requested ressource"})
+            next(new CustomerNotFoundException(customerID));
         });
-        
     }
 
-    public deleteCustomerById = async (req: Request, res: Response, next: NextFunction) => {
-        console.log("deletion attempt" , req.params["customerId"])
-        this.model.findOneAndDelete({_id : req.params["customerId"]}, (error: Error, result: any) =>
-        {
-            if(error){
-                next(new HttpException(503, "Some Mongoose error occured"));
-            }else if(!result){
-                console.log("before");
-                next(new HttpException(404, "Customer not found"));
-                //res.status(404).send({"reason" : "notfound"});
-                console.log("after");
-
+    public deleteCustomerById = async (request: Request, response: Response, next: NextFunction) => {
+        const customerID = request.params["customerId"];
+        console.log("deletion attempt" , customerID);
+        this.model.findOneAndDelete({_id : customerID})
+        .then( deletedCustomer => {
+            console.log(deletedCustomer);
+            if(!deletedCustomer){ //check for not found
+                next(new CustomerNotFoundException(customerID));
             }else{
-                console.log("Succesfully deleted" , result);
-                next(new HttpException(200, "Succesfully deleted" + result));
+                response.status(200).send({message : "Customer " +deletedCustomer.name + " found and deleted"});
             }
-        })
+        }).catch( error => {
+            console.log("Mongoose error:" + error);
+            next(new HttpException(400, "Customer ID malformed"));
+        });
     }
 }
