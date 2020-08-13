@@ -19,7 +19,7 @@ export class CustomerController{
         .then(
             savedContact => {
                 console.log("saved new Customer" , savedContact);
-                response.status(200).send("Customer " + savedContact.name + " saved")
+                response.status(200).send("Customer " + savedContact.firstname+ " " + savedContact.lastname + " saved")
             }
         ).catch( err => {
             console.log("some fail", err);
@@ -43,8 +43,10 @@ export class CustomerController{
     }
 
     public getCustomerById = async (request: Request, response: Response, next: NextFunction) => {
+        console.log("asd");
         const customerID = request.params["customerId"];
-        this.model.findOne({customerId :customerID })
+        console.log(customerID);
+        this.model.findOne({_id :customerID })
         .then(result => {
             console.log(result);
             response.status(200).send(result);
@@ -62,7 +64,7 @@ export class CustomerController{
             if(!deletedCustomer){ //check for not found
                 next(new CustomerNotFoundException(customerID));
             }else{
-                response.status(200).send({message : "Customer " +deletedCustomer.name + " found and deleted"});
+                response.status(200).send({message : "Customer " +deletedCustomer.firstname +" " + deletedCustomer.lastname+ " found and deleted"});
             }
         }).catch( error => {
             console.log("Mongoose error:" + error);

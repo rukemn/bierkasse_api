@@ -1,6 +1,9 @@
 // /lib/routes/crmRoutes.ts
 import {Request, Response} from "express";
 import { CustomerController } from "../controllers/CustomerController";
+import validate from "../middleware/validation"
+import CreateCustomerDto from "../validationDto/CreateCustomerDto";
+import SpecificCustomerDto from "../validationDto/SpecificCustomerDto";
 
 export class Routes {
 
@@ -9,10 +12,9 @@ export class Routes {
         app.route('/')
         .get((req: Request, res: Response) => {            
             res.status(200).send({
-                message: 'GET request successfulll'
+                message: 'GET request successfull'
             })
         })
-
 
         //show items
         app.route('/items')
@@ -38,12 +40,12 @@ export class Routes {
 
         // Create a new contact
         app.route('/customer')
-        .post(this.customerController.createNewCustomer)
+        .post( validate(CreateCustomerDto), this.customerController.createNewCustomer)
         .get(this.customerController.getCustomers);
 
         //Look up by ID
         app.route('/customer/:customerId')
-        .get(this.customerController.getCustomerById)
-        .delete(this.customerController.deleteCustomerById);
+        .get(validate(SpecificCustomerDto, false) , this.customerController.getCustomerById)
+        .delete(validate(SpecificCustomerDto, false), this.customerController.deleteCustomerById);
     }
 }

@@ -1,8 +1,9 @@
 import { Schema, model, Document, Model } from 'mongoose';
 
 declare interface ICustomer extends Document{
-    name: string;
-    mail: string;
+    firstname: string;
+    lastname: string;
+    email: string;
     last_Purchase: Date;
     current_bill: Number;
     creation_date: Date;
@@ -17,7 +18,8 @@ export class Customer {
     constructor() {
         console.log("constructor Customer");
         const schema =  new Schema({
-            name: { type: String, required: true },
+            firstname: { type: String, required: true },
+            lastname: { type: String, required: true },
             email: { type: String, required: true , unique : true},
             last_Purchase: { type: Date },
             current_bill: {type: Number, default: 0.0},
