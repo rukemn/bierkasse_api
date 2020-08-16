@@ -2,11 +2,11 @@ import { Schema, model, Document, Model } from 'mongoose';
 
 declare interface IProduct extends Document{
     name: string;
-    currentPrice: Number;
-    bottleSize: Number;
-    instock: Number;
-    productIcon: string; // should become path / picture
-} 
+    currentPrice: number;
+    bottleSize: number; // in ml
+    inStock: number;
+    productIcon: string; //should become path / Blob of picture
+}
 
 export interface ProductModel extends Model<IProduct>{};
 
@@ -16,14 +16,13 @@ export class Product{
     constructor() {
         const schema = new Schema({
             name : {type: String, required: true},
-            currentPrice: {type: Number},
+            currentPrice: {type: Number, required : true},
             bottleSize: {type: Number},
-            instock: {type: Number}, 
+            inStock: {type: Number}, 
             productIcon: {type: String},
             creation_date: {type: Date, default: Date.now}
         });
-
-
+        
     this._model = model<IProduct>('Product', schema);
     }
 
