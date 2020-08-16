@@ -19,7 +19,7 @@ export class CustomerController{
         .then(
             savedContact => {
                 console.log("saved new Customer" , savedContact);
-                response.status(200).send("Customer " + savedContact.firstname+ " " + savedContact.lastname + " saved")
+                response.status(200).send(`Customer ${savedContact.firstname} ${savedContact.lastname} saved`)
             }
         ).catch( err => {
             next(new HttpException());
@@ -65,7 +65,7 @@ export class CustomerController{
             if(!deletedCustomer){ //check for not found
                 next(new CustomerNotFoundException(customerID));
             }else{
-                response.status(200).send({message : "Customer " +deletedCustomer.firstname +" " + deletedCustomer.lastname+ " found and deleted"});
+                response.status(200).send(`Customer ${deletedCustomer.firstname} ${deletedCustomer.lastname} found and deleted`);
             }
         }).catch( error => {
             next(new HttpException());
