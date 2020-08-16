@@ -22,7 +22,7 @@ export class CustomerController{
                 response.status(200).send("Customer " + savedContact.firstname+ " " + savedContact.lastname + " saved")
             }
         ).catch( err => {
-            console.log("some fail", err);
+            next(new HttpException());
         });
     }
 
@@ -37,27 +37,28 @@ export class CustomerController{
                 response.status(200).send("There are no Customers")
             }
         }).catch(error => {
-            console.log("error" + error);
-            next(new HttpException(500, "internal Error"));        
+            next(new HttpException());        
         })
     }
 
     public getCustomerById = async (request: Request, response: Response, next: NextFunction) => {
-        console.log("asd");
         const customerID = request.params["customerId"];
         console.log(customerID);
         this.model.findOne({_id :customerID })
-        .then(result => {
-            console.log(result);
-            response.status(200).send(result);
+        .then(customer => {
+            if(!customer){
+                next(new CustomerNotFoundException(customerID));
+                return;
+            }else{
+                response.status(200).send(customer);
+            }
         }).catch( error => {
-            next(new CustomerNotFoundException(customerID));
+            next(new HttpException());
         });
     }
 
     public deleteCustomerById = async (request: Request, response: Response, next: NextFunction) => {
         const customerID = request.params["customerId"];
-        console.log("deletion attempt" , customerID);
         this.model.findOneAndDelete({_id : customerID})
         .then( deletedCustomer => {
             console.log(deletedCustomer);
@@ -67,8 +68,7 @@ export class CustomerController{
                 response.status(200).send({message : "Customer " +deletedCustomer.firstname +" " + deletedCustomer.lastname+ " found and deleted"});
             }
         }).catch( error => {
-            console.log("Mongoose error:" + error);
-            next(new HttpException(400, "Customer ID malformed"));
+            next(new HttpException());
         });
     }
 }

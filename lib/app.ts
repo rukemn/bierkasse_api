@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
 import * as express from "express";
 import * as bodyParser from "body-parser";
-import { Routes } from "./routes/crmRoutes";
+import { Routes } from "./routes/Routes";
 import * as mongoose from "mongoose";
 import errorMiddleware from "./middleware/errorHandling"
 dotenv.config();
