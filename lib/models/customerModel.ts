@@ -16,7 +16,6 @@ export class Customer {
     private _model: Model<ICustomer>;
 
     constructor() {
-        console.log("constructor Customer");
         const schema =  new Schema({
             firstname: { type: String, required: true },
             lastname: { type: String, required: true },
