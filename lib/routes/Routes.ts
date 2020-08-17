@@ -9,8 +9,8 @@ import CreateProductDto from "../validationDto/CreateProductDto";
 
 export class Routes {
 
-    public customerController : CustomerController = new CustomerController();  
-    public productController : ProductController = new ProductController();      
+    public customerController : CustomerController = CustomerController.getInstance();
+    public productController : ProductController = ProductController.getInstance();
 
     public routes(app): void {          
         app.route('/')

@@ -7,8 +7,17 @@ import CustomerNotFoundException from "../exceptions/CustomerNotFoundException";
 
 export class CustomerController{
 
+    private static controller : CustomerController;
     private model: CustomerModel;
-    constructor(){
+
+    public static getInstance(){
+        if(!CustomerController.controller){
+            CustomerController.controller = new CustomerController();
+        }
+        return CustomerController.controller;
+    }
+
+    private constructor(){
         this.model = new Customer().model;
         //console.log(this.model);
     }
