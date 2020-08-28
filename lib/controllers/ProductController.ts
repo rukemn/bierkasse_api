@@ -9,11 +9,11 @@ export class ProductController{
     private static constroller : ProductController;
     private model : ProductModel;
 
-    public static getInstance(){
+    public static getInstance = () => {
         if(! ProductController.constroller){
             ProductController.constroller = new ProductController();
         }
-        return this.constroller;
+        return ProductController.constroller;
     }
     private constructor(){
         this.model = new Product().model;

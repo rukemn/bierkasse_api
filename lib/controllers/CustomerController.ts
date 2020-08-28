@@ -10,7 +10,7 @@ export class CustomerController{
     private static controller : CustomerController;
     private model: CustomerModel;
 
-    public static getInstance(){
+    public static getInstance = () => {
         if(!CustomerController.controller){
             CustomerController.controller = new CustomerController();
         }
