@@ -5,6 +5,7 @@ export interface IUser extends Document{
     lastname: string;
     email: string;
     password: string;
+    role : string;
 }
 
 export interface UserModel extends Model<IUser>{};
@@ -19,6 +20,7 @@ export class User {
             lastname: { type: String, required: true },
             email: { type: String, required: true , unique : true},
             password: { type: String},
+            role : {type : String}
         });
 
         try{
