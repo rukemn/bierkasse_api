@@ -1,7 +1,7 @@
 import {IsEmail, IsAlpha, minLength, isAlphanumeric, Length, MinLength, Matches} from "class-validator"
 
 
-class CreateCustomerDto {
+class CreateUserDto {
 
     @Length(2,20, {message : "Length of lastname must be between(including) 2 and 20"})
     @IsAlpha(undefined, {message : "Firstname can only contain Letters"})
@@ -19,4 +19,4 @@ class CreateCustomerDto {
     public password : string;
 }
 
-export default CreateCustomerDto;
+export default CreateUserDto;

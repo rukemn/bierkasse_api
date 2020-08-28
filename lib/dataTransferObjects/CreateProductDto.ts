@@ -1,4 +1,4 @@
-import { IsAlpha, IsPositive, IsInt, IsAscii, IsOptional } from "class-validator";
+import { IsAlpha, IsPositive, IsInt, IsOptional } from "class-validator";
 
 class CreateProductDto{
 
