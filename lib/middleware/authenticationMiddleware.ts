@@ -12,9 +12,7 @@ async function authenticationMiddleware(request: RequestWithUser, response: Resp
 
     if (headers.authorization) {
         console.log(headers.authorization);
-
         const token = headers.authorization.split(" ")[1]; // idx_1 ="Bearer", idx_2 = actual token
-
         const secret = process.env.JWT_SECRET;
         try {
             const verificationResponse = jwt.verify(token, secret) as DataStoredInToken; // throws if wrong/expired
@@ -34,10 +32,9 @@ async function authenticationMiddleware(request: RequestWithUser, response: Resp
             console.log(`verification threw error ${error}`);
             next(new WrongAuthenticationTokenException());
         }
-
+        
     }else{
         next(new NoAuthenticationTokenSuppliedException());
     }
 }
-
 export default authenticationMiddleware;
