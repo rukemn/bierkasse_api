@@ -13,7 +13,6 @@ export interface ICustomer extends Document{
 export interface CustomerModel extends Model<ICustomer> {};
 
 export class Customer {
-
     private _model: Model<ICustomer>;
 
     constructor() {
@@ -29,12 +28,9 @@ export class Customer {
 
         try{
             this._model = model<ICustomer>('customers');
-        }catch(e ){
-            console.log("newly creating..")
-            //console.log(e);
+        }catch(e){
             this._model = model<ICustomer>('customers', schema);
         }
-        
     }
 
     public get model(): Model<ICustomer> {
