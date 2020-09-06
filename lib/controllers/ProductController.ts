@@ -3,11 +3,19 @@ import * as mongoose from "mongoose";
 import HttpException from "../exceptions/HttpException";
 import {Product, ProductModel} from "../models/productModel"
 import ProductNotFoundException from "../exceptions/ProductNotFoundException";
+import { CustomerController } from "./CustomerController";
 
 export class ProductController{
+    private static constroller : ProductController;
     private model : ProductModel;
 
-    constructor(){
+    public static getInstance = () => {
+        if(! ProductController.constroller){
+            ProductController.constroller = new ProductController();
+        }
+        return ProductController.constroller;
+    }
+    private constructor(){
         this.model = new Product().model;
     }
 

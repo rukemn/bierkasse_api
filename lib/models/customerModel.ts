@@ -1,6 +1,6 @@
 import { Schema, model, Document, Model } from 'mongoose';
 
-declare interface ICustomer extends Document{
+export interface ICustomer extends Document{
     firstname: string;
     lastname: string;
     email: string;
@@ -12,7 +12,6 @@ declare interface ICustomer extends Document{
 export interface CustomerModel extends Model<ICustomer> {};
 
 export class Customer {
-
     private _model: Model<ICustomer>;
 
     constructor() {
@@ -25,7 +24,13 @@ export class Customer {
             creation_date: { type: Date, default: Date.now }
         });
 
-        this._model = model<ICustomer>('customers', schema);
+        try{
+            this._model = model<ICustomer>('customers');
+
+            
+        }catch(e){
+            this._model = model<ICustomer>('customers', schema);
+        }
     }
 
     public get model(): Model<ICustomer> {

@@ -10,7 +10,6 @@ function validation<T>(classType : any, body: boolean = true) : express.RequestH
             plainToClass(classType, body ? request.body : request.params) 
             )
         .then((errors : ValidationError[]) => {
-            console.log("then");
             if(errors.length > 0){ // something didn't validate
                 const message = errors.map( (error : ValidationError) =>  Object.values(error.constraints))
                     .join(", ");

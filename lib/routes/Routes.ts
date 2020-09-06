@@ -1,16 +1,20 @@
 // /lib/routes/crmRoutes.ts
-import {Request, Response} from "express";
+import {Request, Response, request} from "express";
 import { CustomerController } from "../controllers/CustomerController";
 import {ProductController} from "../controllers/ProductController";
+import AuthenticationController from "../authentication/AuthenticationController"
 import validate from "../middleware/validation"
-import CreateCustomerDto from "../validationDto/CreateCustomerDto";
-import SpecificCustomerDto from "../validationDto/SpecificCustomerDto";
-import CreateProductDto from "../validationDto/CreateProductDto";
+import CreateUserDto from "../dataTransferObjects/CreateUserDto";
+import SpecificCustomerDto from "../dataTransferObjects/SpecificCustomerDto";
+import CreateProductDto from "../dataTransferObjects/CreateProductDto";
+import LogInDto from "../dataTransferObjects/LogInDto";
+import authenticationMiddleware from "../middleware/authenticationMiddleware";
 
 export class Routes {
 
-    public customerController : CustomerController = new CustomerController();  
-    public productController : ProductController = new ProductController();      
+    public authController : AuthenticationController = AuthenticationController.getInstance();
+    public customerController : CustomerController = CustomerController.getInstance();
+    public productController : ProductController = ProductController.getInstance();
 
     public routes(app): void {          
         app.route('/')
@@ -18,11 +22,14 @@ export class Routes {
             res.status(200).send({
                 message: 'GET request successfull'
             })
-        })
+        });
+
+        app.route("/auth/register").post(validate(CreateUserDto), this.authController.registration);
+        app.route("/auth/login").post(validate(LogInDto), this.authController.loggingIn);
 
         //show items
         app.route('/items')
-        .get(this.productController.getProducts)
+        .get(authenticationMiddleware,this.productController.getProducts)
         // CREATE items
         .post(validate(CreateProductDto), this.productController.createNewProduct)
         // UPDATE items, maybe use patch
@@ -38,7 +45,7 @@ export class Routes {
 
         // Create a new contact
         app.route('/customer')
-        .post( validate(CreateCustomerDto), this.customerController.createNewCustomer)
+        .post( validate(CreateUserDto), this.customerController.createNewCustomer)
         .get(this.customerController.getCustomers);
 
         //Look up by ID
