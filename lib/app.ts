@@ -32,6 +32,7 @@ class App {
     private mongoSetup(): void{
         mongoose.set('useNewUrlParser', true);
         mongoose.set('useUnifiedTopology', true);
+        mongoose.set('useCreateIndex', true);
 
         mongoose.connect(this.mongoUrl).then(async () =>{
             console.log("connected to mongo:", this.mongoUrl);
