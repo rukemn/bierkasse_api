@@ -1,17 +1,23 @@
-import { Schema, model, Document, Model } from 'mongoose';
-
-export interface IUser extends Document{
+import { Schema, model, Document, Model, Mongoose } from 'mongoose';
+enum roles{
+    user = "user",
+    bq = "bierquaestor",
+    hbq = "hauptbierquaestor",
+    admin = "admin"
+}
+interface IUser extends Document{
     firstname: string;
     lastname: string;
     email: string;
     password: string;
-    role : string;
+    role : string; // enum : ["user" , "bq", "hbq", "admin"]
+    ownedCustomer : Schema.Types.ObjectId;
 }
 
-export interface UserModel extends Model<IUser>{};
+interface UserModel extends Model<IUser>{};
 
-export class User {
-
+class User {
+    
     private _model: Model<IUser>;
 
     constructor() {
@@ -20,7 +26,11 @@ export class User {
             lastname: { type: String, required: true },
             email: { type: String, required: true , unique : true},
             password: { type: String},
-            role : {type : String}
+            role : {type : String},
+            ownedCustomer : {
+                type : Schema.Types.ObjectId,
+                ref : 'customer',
+            }
         });
 
         try{
@@ -35,3 +45,5 @@ export class User {
         return this._model;
     }
 }
+
+export {User, IUser, UserModel, roles}
